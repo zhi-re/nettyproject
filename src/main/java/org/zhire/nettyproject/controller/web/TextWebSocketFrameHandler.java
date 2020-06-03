@@ -17,7 +17,8 @@ public class TextWebSocketFrameHandler extends
         SimpleChannelInboundHandler<TextWebSocketFrame> {
 	
 	public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-	
+
+	// 。每当从服务端读到客户端写入信息时，将信息转发给其他客户端的 Channel。其中如果你使用的是 Netty 5.x 版本时，需要把 channelRead0() 重命名为messageReceived()
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx,
                                 TextWebSocketFrame msg) throws Exception { // (1)
@@ -30,7 +31,8 @@ public class TextWebSocketFrameHandler extends
 			}
         }
 	}
-	
+
+	// 每当从服务端收到新的客户端连接时，客户端的 Channel 存入ChannelGroup列表中，并通知列表中的其他客户端 Channel
 	@Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {  // (2)
         Channel incoming = ctx.channel();
@@ -42,6 +44,7 @@ public class TextWebSocketFrameHandler extends
 		System.out.println("Client:"+incoming.remoteAddress() +"加入");
     }
 
+    // 每当从服务端收到客户端断开时，客户端的 Channel 移除 ChannelGroup 列表中，并通知列表中的其他客户端 Channel
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {  // (3)
         Channel incoming = ctx.channel();
@@ -69,7 +72,7 @@ public class TextWebSocketFrameHandler extends
 		System.err.println("Client:"+incoming.remoteAddress()+"掉线");
 	}
 
-	// 异常监听
+	// 异常监听 当出现 Throwable 对象才会被调用，即当 Netty 由于 IO 错误或者处理器在处理事件时抛出的异常时。在大部分情况下，捕获的异常应该被记录下来并且把关联的 channel 给关闭掉。
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)	// (7)
 			throws Exception {

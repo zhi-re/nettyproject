@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
+ * 暂时使用不到 不使用war包部署 使用springboot打成jar包
  * 处理 Http 请求
  */
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> { //1
@@ -63,7 +64,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             if (!keepAlive) {
                 future.addListener(ChannelFutureListener.CLOSE);        //9
             }
-            
+
             file.close();
         }
     }
@@ -73,13 +74,13 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         ctx.writeAndFlush(response);
     }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-			throws Exception {
-    	Channel incoming = ctx.channel();
-		System.out.println("Client:"+incoming.remoteAddress()+"异常");
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+        Channel incoming = ctx.channel();
+        System.out.println("Client:" + incoming.remoteAddress() + "异常");
         // 当出现异常就关闭连接
         cause.printStackTrace();
         ctx.close();
-	}
+    }
 }

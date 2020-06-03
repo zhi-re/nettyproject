@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>index.html</title>
 </head>
 <body>
 Welcome<br/><input id="text" type="text"/>
@@ -14,11 +14,11 @@ Welcome<br/><input id="text" type="text"/>
 </body>
 <script type="text/javascript">
     var websocket = null;
+    //var host = window.location.host;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/ws");
-    }
-    else {
+        websocket = new WebSocket("ws://localhost:7971/ws");
+    } else {
         alert('当前浏览器 Not support websocket')
     }
 
